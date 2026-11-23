@@ -46,6 +46,8 @@ pnpm media:all --docker
 
 Output: `media-output/screenshots/*.png`, `media-output/videos/walkthrough.{webm,mp4}`, and `media-output/vhs/quickstart.{png,gif,mp4}`. VHS takes terminal screenshots; it does not replace Playwright for webpage screenshots. Edit `scripts/media/tapes/quickstart.tape` to change the terminal demo. These files are excluded from Git. The **Visual media** GitHub Actions workflow uses the official pinned VHS container and runs when a release is published and on demand. It uploads the files as artifacts; it does not commit them or deploy the site.
 
+For a Flutter or other Android app already open on an emulator or device, install Android Platform Tools and run `pnpm media:android screenshot --name home` or `pnpm media:android record --name walkthrough --seconds 20`. The files go to `media-output/android/`. Android capture runs on demand, independently of the site preview. See the [media guide](src/content/docs/docs/media.md#capture-an-android-app) for device selection and CI integration.
+
 ## Publishing
 
 Set **Settings → Pages → Source** to **GitHub Actions**. The Pages workflow builds, checks, and publishes the site on published releases and manual runs. Pushes and pull requests run lint, type checks, and VHS tests. For other hosts, set `SITE_URL` to the canonical origin and publish the static files in `dist/`. [Deployment guide](src/content/docs/docs/deployment.md)

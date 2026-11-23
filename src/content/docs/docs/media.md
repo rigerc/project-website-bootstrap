@@ -1,6 +1,6 @@
 ---
 title: Screenshots and video
-description: Reproducible Playwright website screenshots and VHS CLI terminal screenshots/videos.
+description: Website, terminal, and Android app screenshots and video recordings.
 sidebar:
   order: 4
   label: Screenshots & video
@@ -51,6 +51,39 @@ FFmpeg must be installed locally for the Playwright MP4 conversion.
 Install **VHS**, **ttyd** and **FFmpeg**, then run `pnpm media:vhs`, or use the official pinned container with `pnpm media:vhs --docker` (requires Docker). VHS cannot capture a rendered browser page: for homepage and docs PNGs, use `pnpm media:capture` (Playwright). You can run all three outputs with `pnpm media:all --docker` while the preview server is running.
 
 Make terminal demo edits in the `.tape` file, not in generated assets. Outputs are written to `media-output/`, which is gitignored.
+
+## Capture an Android app
+
+Install [Android SDK Platform Tools](https://developer.android.com/tools/releases/platform-tools) and make sure `adb` is on `PATH`. Start an emulator or authorize USB debugging on a connected device. Open your Flutter or other Android app and navigate to the screen you want to capture. Run the capture commands from the website directory.
+
+```bash
+adb devices
+pnpm media:android screenshot --name home
+pnpm media:android record --name walkthrough --seconds 20
+```
+
+- Select a device with `--serial emulator-5554` or `ANDROID_SERIAL` when several devices are ready. The command automatically selects a sole ready device.
+- Pass `--package com.example.app` to check which app has focus before starting capture.
+- Screenshots and recordings are saved as `media-output/android/<name>.png` and `media-output/android/<name>.mp4`. A successful capture replaces an earlier file with the same name.
+- Recordings default to 20 seconds and accept 1–180 seconds. They capture the display without audio. Keep the orientation fixed and use demo data for any media you intend to share. Press Ctrl+C to cancel a capture.
+
+For repeatable demos, have your app's own script prepare its state and call `screenshot` at each named checkpoint. Start `record` alongside the steps you want to show. Flutter projects can reuse a demo build, app deep links, or an [integration test](https://docs.flutter.dev/cookbook/testing/integration/introduction). The app project controls the build, device profile, and interactions.
+
+### Run Android capture in CI
+
+For an on-demand workflow, use `workflow_dispatch` and add these steps after checkout, Node and pnpm setup, and Android device/app setup. Reuse an existing connected emulator and APK when available. A dedicated capture job only needs one emulator profile and the demo APK. Replace the script path with your app's capture script. Run that script from the website directory or have it invoke `pnpm --dir website media:android` from the app repository root.
+
+```yaml
+- name: Capture the Android demo
+  run: ./scripts/capture-android-demo.sh
+- uses: actions/upload-artifact@v5
+  with:
+    name: android-media
+    path: media-output/android/
+    if-no-files-found: error
+```
+
+Set the upload path to `website/media-output/android/` if the site lives under `website/`. The template's Visual media workflow continues to capture the website and terminal demos on its own schedule.
 
 ## GitHub Actions
 

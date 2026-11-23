@@ -32,6 +32,7 @@
     "test:run": "vitest run",
     "media:capture": "node scripts/media/capture.mjs",
     "media:video": "node scripts/media/video.mjs",
+    "media:android": "node scripts/media/android.mjs",
     "check:site": "node scripts/check-site.mjs",
     "media:vhs": "node scripts/media/vhs.mjs",
     "media:all": "node scripts/media/all.mjs",

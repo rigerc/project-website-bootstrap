@@ -16,7 +16,8 @@ This fork began as [Astro Rocket](https://github.com/hansmartensdev/Astro-Rocket
 - `pnpm media:capture`: browser screenshots using Playwright, requires a locally running preview server.
 - `pnpm media:video`: browser walkthrough recording, then FFmpeg MP4 conversion, requires a preview server.
 - `pnpm media:vhs`: terminal PNG/GIF/MP4 produced by Charmbracelet VHS from `scripts/media/tapes/quickstart.tape`. It does **not** screenshot a webpage. VHS/ttyd/FFmpeg or Docker is required.
-- `pnpm media:all --docker`: run all capture scripts when the local preview is serving.
+- `pnpm media:all --docker`: run the browser and terminal captures when the local preview is serving.
+- `pnpm media:android`: opt-in Android screenshots and MP4 recordings from an app already open on an emulator or device. Requires Android Platform Tools with `adb` on `PATH`.
 - `media-output/` is generated, gitignored output. Do not check rendered media into the repo unless expressly requested.
 - `.github/workflows/visual-media.yml` uploads generated assets as Actions artifacts with read-only token permissions.
 
