@@ -178,6 +178,12 @@ function faviconAssets() {
   };
 }
 
+/** `BASE_PATH=/repo/` or `repo` → `/repo`; empty or `/` → undefined. */
+const basePath = (() => {
+  const raw = (process.env.BASE_PATH || '').trim().replace(/^\/+|\/+$/g, '');
+  return raw ? `/${raw}` : undefined;
+})();
+
 /**
  * OG share cards, drawn after every `astro build`.
  *
@@ -245,6 +251,8 @@ function ogCards() {
           let path;
           try {
             path = new URL(image, siteUrl).pathname;
+            // Cards are written under dist/, which is already the base.
+            if (basePath && path.startsWith(`${basePath}/`)) path = path.slice(basePath.length);
           } catch {
             continue;
           }
@@ -363,6 +371,9 @@ export default defineConfig({
       ? await resolveAdapter()
       : undefined,
   site: process.env.SITE_URL || SITE_URL_FALLBACK,
+  // Set BASE_PATH (e.g. `/repo`) when serving below a sub-path, as GitHub Pages
+  // project sites do. Unset, the site is served from the root.
+  ...(basePath ? { base: basePath } : {}),
   ...(astroI18nOptions ? { i18n: astroI18nOptions } : {}),
 
   // Astro 7 changed the default to 'jsx', which strips whitespace between

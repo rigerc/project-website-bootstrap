@@ -1,5 +1,6 @@
 ---
 import LandingLayout from '@/layouts/LandingLayout.astro';
+import { withBase } from '@/lib/base';
 ---
 <LandingLayout title="Page not found" description="This page could not be found.">
   <main style="min-height:72vh;display:flex;align-items:center;justify-content:center;padding:9rem 1.5rem 4rem;text-align:center;background:#101827;color:#edf2ff">
@@ -7,8 +8,8 @@ import LandingLayout from '@/layouts/LandingLayout.astro';
       <p style="font:700 .8rem monospace;letter-spacing:.2em;color:#a5a6fc">404 / NOT FOUND</p>
       <h1 style="font-size:clamp(2.5rem,8vw,5rem);font-weight:700;letter-spacing:-.05em;margin:1rem 0">Nothing here yet.</h1>
       <p style="color:#adb8cd;margin-bottom:2rem">Try the project homepage or browse the documentation.</p>
-      <a href="/" style="color:#b0b0ff;text-decoration:underline;margin-right:1.5rem">Home</a>
-      <a href="/docs/" style="color:#b0b0ff;text-decoration:underline">Docs</a>
+      <a href={withBase('/')} style="color:#b0b0ff;text-decoration:underline;margin-right:1.5rem">Home</a>
+      <a href={withBase('/docs/')} style="color:#b0b0ff;text-decoration:underline">Docs</a>
     </div>
   </main>
 </LandingLayout>

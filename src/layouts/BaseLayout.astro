@@ -10,6 +10,7 @@ import CursorTrail from '@/components/effects/CursorTrail.astro';
 import { createWebsiteSchema, createOrganizationSchema, createPersonSchema, createProfessionalServiceSchema } from '@/lib/schema';
 import type { Thing, WithContext } from 'schema-dts';
 import siteConfig from '@/config/site.config';
+import { withBase } from '@/lib/base';
 import { t, getLocaleFromPath } from '@/i18n';
 
 interface Props {
@@ -103,10 +104,10 @@ if (commentsConfig?.enabled) {
          src/lib/favicon), and PNG/ICO fallbacks are provided so search-engine
          crawlers, Safari and legacy browsers all render the brand mark. -->
     <link rel="icon" type="image/svg+xml" href={siteConfig.branding.favicon.svg} />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32x32.png')} />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('/apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('/manifest.webmanifest')} />
     <meta name="theme-color" content={siteConfig.branding.colors.themeColor} />
 
     <!-- SEO -->

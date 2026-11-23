@@ -31,6 +31,7 @@
  * identical to a single-locale site.
  */
 import { localizedPath, t, defaultLocale, type Locale } from '@/i18n';
+import { withBase } from '@/lib/base';
 
 /** Per-locale override for a nav item or legal link's label and/or path. */
 export interface NavItemOverride {
@@ -143,7 +144,9 @@ export function resolveNavItem(item: NavItem | LegalLink, locale: Locale): Resol
   const label = override?.label ?? (item.labelKey ? t(item.labelKey, locale) : item.label);
   const rawHref = override?.href ?? item.href;
   const href =
-    item.external || isExternalOrAnchorHref(rawHref) ? rawHref : localizedPath(rawHref, locale);
+    item.external || isExternalOrAnchorHref(rawHref)
+      ? rawHref
+      : withBase(localizedPath(rawHref, locale));
   return { label, href, external: item.external };
 }
 
@@ -180,5 +183,5 @@ export function getLegalLinks(locale: Locale = defaultLocale): ResolvedNavItem[]
  * (`/` on the default locale, `/<locale>` elsewhere).
  */
 export function getLogoHref(locale: Locale = defaultLocale): string {
-  return localizedPath('/', locale);
+  return withBase(localizedPath('/', locale));
 }

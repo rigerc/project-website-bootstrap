@@ -37,4 +37,4 @@ pnpm build
 pnpm preview
 ```
 
-Use the [media workflow](/docs/media/) once the site builds successfully. Do not publish placeholder metadata or example URLs in production.
+Use the [media workflow](../media/) once the site builds successfully. Do not publish placeholder metadata or example URLs in production.

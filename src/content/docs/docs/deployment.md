@@ -14,6 +14,18 @@ Commit the generated `pnpm-lock.yaml`. Once it is committed, update CI from `pnp
 
 The generated static output includes `/index.html` and `/docs/index.html`. Use Astro Rocket's supported deployment target or a static site host. For fully static hosting, ensure the build is configured to emit static HTML and that hosting rewrites do not shadow the `/docs/` pages.
 
+## GitHub Pages
+
+The **Deploy to GitHub Pages** workflow builds and publishes the site on every push to `main`. In the repository settings, set **Pages → Source** to **GitHub Actions**.
+
+A project site is served below a sub-path such as `/project-website-bootstrap/`. The workflow reads that path from `actions/configure-pages` and passes it to the build as `BASE_PATH`; with a custom domain it is empty and the site is served from the root. To reproduce it locally:
+
+```bash
+SITE_URL=https://USER.github.io BASE_PATH=/REPO pnpm build
+```
+
+Hand-written root-absolute links must go through `withBase()` from `src/lib/base.ts`, and links inside the docs markdown should be relative (`./media/`).
+
 ## Validation
 
 ```bash
