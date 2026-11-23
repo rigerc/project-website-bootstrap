@@ -7,10 +7,10 @@ Welcome to the documentation for **Your Project**. This site has one public prod
 
 ## Start here
 
-- [Getting started](/docs/getting-started/) — install the fork, change the product identity, and run the site locally.
-- [Configuration](/docs/configuration/) — update project copy, URLs, metadata, and navigation.
-- [Screenshots and video](/docs/media/) — generate repeatable website and terminal assets with Playwright, FFmpeg, and VHS.
-- [Deployment](/docs/deployment/) — ship the static pages and docs together.
+- [Getting started](./getting-started/) — install the fork, change the product identity, and run the site locally.
+- [Configuration](./configuration/) — update project copy, URLs, metadata, and navigation.
+- [Screenshots and video](./media/) — generate repeatable website and terminal assets with Playwright, FFmpeg, and VHS.
+- [Deployment](./deployment/) — ship the static pages and docs together.
 
 ## Architecture
 

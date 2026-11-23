@@ -2,6 +2,7 @@ import { SITE_URL, GOOGLE_SITE_VERIFICATION, BING_SITE_VERIFICATION } from 'astr
 import i18nConfig, { type I18nConfig } from './i18n.config';
 import { SITE_URL_FALLBACK } from './site-url';
 import { SITE_NAME, THEME_COLOR } from './branding';
+import { withBase } from '../lib/base';
 
 export { i18nConfig };
 export type { I18nConfig };
@@ -271,7 +272,7 @@ const siteConfig: SiteConfig = {
   // Generated at build time from `name`, `tagline` and the brand colour below.
   // Point this at a file in `public/` to use your own — it has to be a raster
   // (PNG or JPEG): social platforms don't render SVG share images.
-  ogImage: '/og/default.png',
+  ogImage: withBase('/og/default.png'),
   author: 'Project team',
   email: 'team@example.com',
   socialLinks: [],
@@ -354,10 +355,10 @@ const siteConfig: SiteConfig = {
     logo: {
       alt: SITE_NAME,
       // image: '/logo.svg', // Optional: set to a file in public/ to use a custom logo image instead of the letter monogram.
-      imageUrl: '/favicon.svg',
+      imageUrl: withBase('/favicon.svg'),
     },
     favicon: {
-      svg: '/favicon.svg',
+      svg: withBase('/favicon.svg'),
     },
     colors: {
       themeColor: THEME_COLOR,
