@@ -53,7 +53,7 @@ jobs:
       - run: pnpm media:vhs:check
       - name: Capture terminal PNG, GIF, and MP4 (VHS CLI)
         run: node scripts/media/vhs.mjs --docker
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: visual-media-${{ github.run_number }}
