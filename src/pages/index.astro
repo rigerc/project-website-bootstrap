@@ -1,0 +1,91 @@
+---
+import LandingLayout from '@/layouts/LandingLayout.astro';
+import Icon from '@/components/ui/primitives/Icon/Icon.astro';
+import { project } from '@/config/project.config';
+import '@/styles/project.css';
+---
+
+<LandingLayout title={project.name} description={project.description}>
+  <main id="main-content" class="project-site">
+    <section class="project-hero" aria-labelledby="project-title">
+      <div class="project-glow" aria-hidden="true"></div>
+      <div class="project-shell hero-grid">
+        <div class="hero-content">
+          <div class="project-eyebrow"><span class="eyebrow-dot"></span>{project.eyebrow}</div>
+          <h1 id="project-title">{project.headline}</h1>
+          <p class="hero-summary">{project.summary}</p>
+          <div class="hero-actions">
+            <a class="project-button primary" href="/docs/getting-started/">Get started <Icon name="arrow-up-right" size="sm" /></a>
+            <a class="project-button secondary" href={project.repository} target="_blank" rel="noopener noreferrer">View source <Icon name="github" size="sm" /></a>
+          </div>
+          <div class="hero-meta"><span class="status-dot"></span> {project.versionLabel} <span aria-hidden="true">/</span> Built on Astro Rocket <span aria-hidden="true">/</span> Docs by Starlight</div>
+        </div>
+        <div class="product-preview" aria-label="Example developer experience">
+          <div class="window-top"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>your-project / terminal</span><Icon name="terminal" size="sm" /></div>
+          <div class="window-body">
+            <div class="terminal-row"><span class="prompt">$</span><span>git clone {project.repository}</span></div>
+            <div class="terminal-row"><span class="prompt">$</span><span>{project.installCommand}</span></div>
+            <div class="terminal-rule"></div>
+            <div class="terminal-success"><span class="terminal-pulse"></span> PROJECT READY</div>
+            <div class="terminal-muted">A single product website.</div>
+            <div class="terminal-muted">Documentation under <strong>/docs</strong>.</div>
+            <div class="terminal-muted">Screenshots + demo video in CI.</div>
+          </div>
+          <div class="preview-footer"><span>Production-friendly foundation</span><span>Astro &middot; Starlight &middot; Playwright</span></div>
+        </div>
+      </div>
+      <div class="project-shell hero-bottom"><span>BUILT FOR CLARITY</span><span>01 / OVERVIEW</span></div>
+    </section>
+
+    <section id="features" class="project-section" aria-labelledby="features-title">
+      <div class="project-shell">
+        <div class="section-kicker">THE FOUNDATION</div>
+        <div class="section-heading"><h2 id="features-title">Everything important.<br /><em>Nothing distracting.</em></h2><p>One homepage, one documentation system, and one reproducible media pipeline. Customize each without reinventing the surrounding infrastructure.</p></div>
+        <div class="feature-grid">
+          {project.benefits.map((benefit) => (
+            <article class="feature-card">
+              <div class="feature-top"><span>{benefit.number}</span><span class="feature-icon"><Icon name={benefit.icon} size="lg" /></span></div>
+              <h3>{benefit.title}</h3>
+              <p>{benefit.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="project-section section-alt" aria-labelledby="workflow-title">
+      <div class="project-shell workflow-grid">
+        <div>
+          <div class="section-kicker">HOW IT WORKS</div>
+          <h2 id="workflow-title">From first look<br />to first commit.</h2>
+          <p class="section-lead">Give visitors a deliberate journey: understand what you're building, explore the experience, and follow a documented path to adoption.</p>
+          <a class="project-text-link" href="/docs/">Explore the docs <Icon name="arrow-up-right" size="sm" /></a>
+        </div>
+        <div class="workflow-steps">
+          {project.steps.map((step, index) => (
+            <div class="workflow-step"><span class="step-number">0{index + 1}</span><div><h3>{step.label}</h3><p>{step.detail}</p></div><Icon name="arrow-up-right" size="lg" /></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="media" class="project-section" aria-labelledby="media-title">
+      <div class="project-shell">
+        <div class="section-kicker">PROVE IT VISUALLY</div>
+        <div class="section-heading"><h2 id="media-title">A capture pipeline,<br /><em>not a manual chore.</em></h2><p>Every run can produce a desktop screenshot, mobile screenshot, documentation screenshot, and a browser-recorded MP4 demo, plus VHS-powered terminal PNG/GIF/MP4 recordings.</p></div>
+        <div class="media-grid">
+          <div class="media-tile large"><div class="media-tile-header"><Icon name="monitor" size="sm" /> DESKTOP CAPTURE <span>1440 × 900</span></div><div class="media-art screen-art"><div class="art-top"></div><div class="art-line thick"></div><div class="art-line"></div><div class="art-panels"><i></i><i></i><i></i></div></div></div>
+          <div class="media-tile"><div class="media-tile-header"><Icon name="smartphone" size="sm" /> MOBILE <span>390 × 844</span></div><div class="media-art mobile-art"><div class="phone-outer"><div class="phone-header"></div><div class="phone-line"></div><div class="phone-line short"></div><div class="phone-button"></div></div></div></div>
+          <div class="media-tile"><div class="media-tile-header"><Icon name="clapperboard" size="sm" /> VIDEO <span>MP4</span></div><div class="media-art video-art"><div class="play-orb"><Icon name="play" size="xl" /></div><div class="timeline"><span></span></div></div></div>
+        </div>
+        <p class="media-caption">These are design previews. The real browser and terminal captures are generated by the <code>Visual media</code> GitHub Actions workflow; see <a href="/docs/media/">Media workflow docs</a>.</p>
+      </div>
+    </section>
+
+    <section id="faq" class="project-section section-alt" aria-labelledby="faq-title">
+      <div class="project-shell faq-grid"><div><div class="section-kicker">QUESTIONS</div><h2 id="faq-title">Good to know.</h2><p class="section-lead">Short answers. Deeper instructions in the docs.</p></div><div class="faq-list">{project.faqs.map((item) => (<details><summary>{item.question}<Icon name="plus" size="sm" /></summary><p>{item.answer}</p></details>))}</div></div>
+    </section>
+
+    <section class="project-final-cta" aria-labelledby="start-title"><div class="project-shell final-inner"><span class="section-kicker">MAKE IT YOURS</span><h2 id="start-title">One project deserves<br />a great first impression.</h2><p>Edit the project configuration, publish your docs, and generate the media your visitors need.</p><div class="hero-actions"><a class="project-button primary" href="/docs/getting-started/">Read the quick start <Icon name="arrow-up-right" size="sm" /></a>{project.demoUrl && <a class="project-button secondary" href={project.demoUrl} target="_blank" rel="noopener noreferrer">Open live demo <Icon name="external-link" size="sm" /></a>}</div></div></section>
+  </main>
+</LandingLayout>
