@@ -15,6 +15,10 @@ pnpm dev
 
 Edit `src/config/project.config.ts` for the site name, accent color, homepage sections, links, and media. Edit Markdown under `src/content/docs/docs/` to update `/docs/`. The [configuration guide](src/content/docs/docs/configuration.md) shows how to set up a homepage for your project.
 
+## Add to an existing project
+
+Put the site in a `website/` subdirectory and keep your project's existing dependencies and tooling. The [integration guide](src/content/docs/docs/integrate.md) covers copying the template, validating the site, and deploying it from your project's releases.
+
 ## Test and build
 
 ```bash

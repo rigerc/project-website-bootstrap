@@ -13,6 +13,8 @@ sidebar:
 
 ## Local development
 
+If you already have a project repository, see [Add to an existing project](../integrate/) for a setup that keeps the site in its own directory.
+
 ```bash
 # In your forked repository
 corepack enable
