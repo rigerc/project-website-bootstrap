@@ -6,6 +6,8 @@ import { project } from '../../src/config/project.config.ts';
  */
 export const baseUrl = (process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:4321').replace(/\/$/, '');
 
+const titleEntities = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'" };
+
 /**
  * Stops the media scripts photographing somebody else's site.
  *
@@ -27,7 +29,9 @@ export async function assertTargetIsThisSite() {
   }
   if (!response.ok) throw new Error(`${baseUrl}/ returned ${response.status}, expected the built site.`);
   const html = await response.text();
-  const title = html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1]?.trim() ?? '(no title)';
+  const title = html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1]
+    ?.replace(/&(amp|lt|gt|quot|#39|#x27);/g, (_, entity) => titleEntities[entity])
+    .trim() ?? '(no title)';
   if (!title.includes(project.name)) {
     throw new Error(
       `${baseUrl}/ is not this site: its title is "${title}" but project.name is "${project.name}". ` +

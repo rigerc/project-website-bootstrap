@@ -11,6 +11,7 @@ import { createWebsiteSchema, createOrganizationSchema, createPersonSchema, crea
 import type { Thing, WithContext } from 'schema-dts';
 import siteConfig from '@/config/site.config';
 import { withBase } from '@/lib/base';
+import { siteAccentCss } from '@/lib/accent';
 import { t, getLocaleFromPath } from '@/i18n';
 
 interface Props {
@@ -65,26 +66,6 @@ if (includeProfessionalServiceSchema) {
 schemas.push(...extraSchemas);
 
 const locale = getLocaleFromPath(Astro.url.pathname);
-const commentsConfig = siteConfig.articleFeatures?.comments;
-
-let commentsPreconnectHref: string | null = null;
-
-if (commentsConfig?.enabled) {
-  if (commentsConfig.provider === 'cusdis') {
-    commentsPreconnectHref = commentsConfig.cusdis?.host ?? 'https://cusdis.com';
-  } else if (commentsConfig.provider === 'artalk') {
-    const server = commentsConfig.artalk?.server;
-    if (server) {
-      try {
-        commentsPreconnectHref = new URL(server).origin;
-      } catch {
-        commentsPreconnectHref = server;
-      }
-    }
-  } else {
-    commentsPreconnectHref = 'https://giscus.app';
-  }
-}
 ---
 
 <!doctype html>
@@ -98,8 +79,6 @@ if (commentsConfig?.enabled) {
     <link rel="preload" as="font" type="font/woff2" href={manropeFont} crossorigin="anonymous" />
     <link rel="preload" as="font" type="font/woff2" href={outfitFont} crossorigin="anonymous" />
 
-    {commentsPreconnectHref && <link rel="preconnect" href={commentsPreconnectHref} crossorigin />}
-
     <!-- Favicon. The SVG letter is outlined to a vector path at build time (see
          src/lib/favicon), and PNG/ICO fallbacks are provided so search-engine
          crawlers, Safari and legacy browsers all render the brand mark. -->
@@ -109,6 +88,8 @@ if (commentsConfig?.enabled) {
     <link rel="apple-touch-icon" sizes="180x180" href={withBase('/apple-touch-icon.png')} />
     <link rel="manifest" href={withBase('/manifest.webmanifest')} />
     <meta name="theme-color" content={siteConfig.branding.colors.themeColor} />
+    <!-- Brand scale from project.config.ts `accentColor` (see src/lib/accent.ts). -->
+    <style is:inline set:html={siteAccentCss(siteConfig.branding.colors.themeColor)}></style>
 
     <!-- SEO -->
     <SEO

@@ -13,15 +13,11 @@
 # Everything Astro inlines into the generated files at build time, shared by
 # both services so a preview and an export build the same site.
 #
-# The three server-side secrets (RESEND_API_KEY, RESEND_FROM_EMAIL,
-# RESEND_AUDIENCE_ID) are not here: they are read by the API routes, and
-# neither service carries routes.
 x-build-config: &build-config
   PUBLIC_GA_MEASUREMENT_ID: ${PUBLIC_GA_MEASUREMENT_ID:-}
   PUBLIC_GTM_ID: ${PUBLIC_GTM_ID:-}
   PUBLIC_UMAMI_WEBSITE_ID: ${PUBLIC_UMAMI_WEBSITE_ID:-}
   PUBLIC_UMAMI_SRC: ${PUBLIC_UMAMI_SRC:-}
-  PUBLIC_GOOGLE_MAPS_API_KEY: ${PUBLIC_GOOGLE_MAPS_API_KEY:-}
   PUBLIC_CONSENT_ENABLED: ${PUBLIC_CONSENT_ENABLED:-}
   PUBLIC_PRIVACY_POLICY_URL: ${PUBLIC_PRIVACY_POLICY_URL:-}
   GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
@@ -34,7 +30,7 @@ services:
       context: .
       args:
         <<: *build-config
-        # What canonical tags, og:image, RSS and the sitemap are written
+        # What canonical tags, og:image and the sitemap are written
         # against. Override when previewing with your own domain.
         SITE_URL: ${SITE_URL:-http://localhost:4321}
     ports:
@@ -66,5 +62,5 @@ services:
       sh -c "echo '[clearing ./dist]' &&
              find /export -mindepth 1 -delete &&
              echo '[copying the build to ./dist]' &&
-             cp -a /app/dist/client/. /export/ &&
+             cp -a /app/dist/. /export/ &&
              echo '[done]'"

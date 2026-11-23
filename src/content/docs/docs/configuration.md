@@ -1,26 +1,38 @@
 ---
 title: Configuration
 description: Edit the single-project configuration and documentation routes.
+sidebar:
+  order: 3
 ---
 
 ## Project content
 
-The homepage's editable content is in `src/config/project.config.ts`:
+Edit `src/config/project.config.ts` to set the project identity, hero, and sections. This example configures a game with a screenshot and a single link.
 
 ```ts
-export const project = {
-  name: 'Your Project',
-  headline: 'Your project headline',
-  summary: 'What it does and who it helps',
-  repository: 'https://github.com/YOU/REPO',
-  demoUrl: '',
-  terminal: { title: 'name / terminal', commands: ['npm install -g name'], /* ... */ },
-  sections: { features: { kicker, heading, lead }, /* workflow, media, faq, cta */ },
-  // benefits, steps, faqs ...
-} as const;
+const demoUrl = 'https://example.com/play';
+
+export const project: ProjectConfig = {
+  name: 'Pocket Observatory',
+  description: 'A puzzle game about mapping the night sky.',
+  accentColor: '#ef9554',
+  repository: '',
+  demoUrl,
+  hero: {
+    headline: 'Map the stars.\n*Find your way home.*',
+    summary: 'Connect constellations to solve a new puzzle each night.',
+    actions: [{ label: 'Play the demo', href: demoUrl, variant: 'primary' }],
+    visual: { type: 'image', src: '/screenshots/game.png', alt: 'A constellation puzzle in progress' },
+  },
+  sections: [],
+};
 ```
 
-Every visible string on the homepage comes from this file, including the hero terminal mockup and each section heading. Put `\n` in a heading to break it onto two lines. Nothing on the homepage is hardcoded in `src/pages/index.astro`, and `pnpm check:site --strict` fails if any of the template's default placeholder text (its example project name, repository path, or terminal title) is left in the built pages. Plain `pnpm check:site` only warns, since a fresh template has them on purpose.
+Choose a `terminal`, `image`, or `video` hero visual, or omit `visual` for a text-only hero. Put local media in `public/` and use URLs such as `/screenshots/game.png`. In headings, `\n` starts a new line and `*text*` uses the accent color. Actions with an empty `href` are hidden. Set `repository` to an empty string to hide the source link in the docs.
+
+Arrange `sections` in the order they should appear. The supported types are `features`, `steps`, `media`, `faq`, and `cta`. Give each section a unique `id` and an optional `nav` label to add it to the header. List sections with empty `items` are skipped. To use your own screenshot or video in a media tile, set the item's `image` or `video` field.
+
+Before publishing, run `pnpm check:site --strict` to catch the template's placeholder project name, repository URL, and terminal title in the generated HTML. Plain `pnpm check:site` reports them as warnings.
 
 The docs are in `src/content/docs/docs/*.md`. Starlight is configured under `starlight()` in `astro.config.mjs` and the `docs` content collection in `src/content.config.ts`.
 
@@ -37,8 +49,8 @@ The docs are in `src/content/docs/docs/*.md`. Starlight is configured under `sta
 
 ## Navigation and metadata
 
-`src/config/nav.config.ts` controls the Astro Rocket header and footer. The Starlight sidebar is configured in `astro.config.mjs`. Set the canonical URL with `SITE_URL=https://your-domain.example` during build.
+`src/config/nav.config.ts` controls shared navigation links such as Home and Docs. Starlight adds Markdown pages to its sidebar automatically. Set `sidebar.order` and `sidebar.label` in a page's frontmatter to customize its position and label. Set the canonical origin with `SITE_URL=https://your-domain.example` during build.
 
 ## Styling
 
-`src/styles/project.css` is isolated beneath `.project-site`. The rest of Astro Rocket's component system remains available. The docs use Starlight's own accessible layout and styles to avoid leaking homepage theme styles into documentation.
+The `accentColor` hex value tints the homepage, header, documentation, favicon, and generated social cards. Edit `src/styles/project.css` to change the homepage layout or background colors.

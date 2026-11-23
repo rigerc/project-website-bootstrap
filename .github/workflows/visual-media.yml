@@ -36,7 +36,7 @@ jobs:
         run: |
           pnpm preview --host 127.0.0.1 --port 4321 --strictPort > /tmp/astro-preview.log 2>&1 &
           echo $! > /tmp/astro-preview.pid
-          for attempt in $(seq 1 40); do
+          for _ in $(seq 1 40); do
             if curl -fsS http://127.0.0.1:4321/docs/ -o /dev/null; then exit 0; fi
             if ! kill -0 "$(cat /tmp/astro-preview.pid)"; then cat /tmp/astro-preview.log; exit 1; fi
             sleep 1

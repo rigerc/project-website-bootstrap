@@ -1,6 +1,9 @@
 ---
 title: Project documentation
 description: Overview and routes for the single-project website.
+sidebar:
+  order: 1
+  label: Overview
 ---
 
 Welcome to the documentation for **Your Project**. This site has one public product landing page at `/` and one documentation area under `/docs/`.

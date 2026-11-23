@@ -32,6 +32,7 @@
  */
 import { localizedPath, t, defaultLocale, type Locale } from '@/i18n';
 import { withBase } from '@/lib/base';
+import { hasSectionContent, project } from './project.config';
 
 /** Per-locale override for a nav item or legal link's label and/or path. */
 export interface NavItemOverride {
@@ -84,13 +85,20 @@ export interface ResolvedNavItem {
   external?: boolean;
 }
 
+/**
+ * Header navigation: Overview, then every homepage section that has a `nav`
+ * label in `project.config.ts` (so removing a section removes its link), then
+ * the docs. Add or reorder links by editing this array directly.
+ */
+const sectionNavItems = project.sections.flatMap((section) =>
+  section.nav && hasSectionContent(section) ? [{ label: section.nav, href: `/#${section.id}` }] : []
+);
+
 export const navItems: NavItem[] = [
-  { label: 'Overview', href: '/', order: 0 },
-  { label: 'Features', href: '/#features', order: 1 },
-  { label: 'Workflow', href: '/#workflow', order: 2 },
-  { label: 'Docs', href: '/docs/', order: 3 },
-  { label: 'Media', href: '/#media', order: 4 },
-];
+  { label: 'Overview', href: '/' },
+  ...sectionNavItems,
+  { label: 'Docs', href: '/docs/' },
+].map((item, order) => ({ ...item, order }));
 
 export const footerNavItems: NavItem[] = [
   { label: 'Home', href: '/', order: 0 },

@@ -1,6 +1,9 @@
 ---
 title: Screenshots and video
 description: Reproducible Playwright website screenshots and VHS CLI terminal screenshots/videos.
+sidebar:
+  order: 4
+  label: Screenshots & video
 ---
 
 ## What gets captured

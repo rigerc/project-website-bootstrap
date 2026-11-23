@@ -1,4 +1,6 @@
-# Your Project — single-project Astro site
+# Single-project Astro site
+
+A configurable homepage and documentation site for one personal project. Change the copy, accent color, sections, and media in one file.
 
 Built from [Astro Rocket](https://github.com/hansmartensdev/Astro-Rocket) by Hans Martens, with [Starlight](https://starlight.astro.build/) documentation, Playwright website captures, and [VHS CLI](https://github.com/charmbracelet/vhs) terminal recordings.
 
@@ -11,7 +13,7 @@ cp .env.example .env
 pnpm dev
 ```
 
-The homepage is `/`, the docs are at `/docs/`. Edit `src/config/project.config.ts` to change homepage content, and `src/content/docs/docs/` to update the docs. Change `src/config/branding.ts` for the site name and toolbar color. Set `SITE_URL` when deploying.
+Edit `src/config/project.config.ts` for the site name, accent color, homepage sections, links, and media. Edit Markdown under `src/content/docs/docs/` to update `/docs/`. The [configuration guide](src/content/docs/docs/configuration.md) shows how to set up a homepage for your project.
 
 ## Test and build
 
@@ -19,6 +21,7 @@ The homepage is `/`, the docs are at `/docs/`. Edit `src/config/project.config.t
 pnpm lint
 pnpm check
 pnpm build
+pnpm check:site
 pnpm preview
 ```
 
@@ -41,7 +44,7 @@ Output: `media-output/screenshots/*.png`, `media-output/videos/walkthrough.{webm
 
 ## Publishing
 
-Configure your deployment provider's Git integration and `SITE_URL`. Run `pnpm install` and commit its newly generated lockfile before changing CI installs back to `--frozen-lockfile`. The source template's build commands are retained; the new quality workflow checks `/` and `/docs/` after static build. See `/docs/deployment/` for deployment checks.
+Set **Settings → Pages → Source** to **GitHub Actions**. The Pages workflow builds, checks, and publishes the site on published releases and manual runs. Pushes and pull requests run lint, type checks, and VHS tests. For other hosts, set `SITE_URL` to the canonical origin and publish the static files in `dist/`. [Deployment guide](src/content/docs/docs/deployment.md)
 
 ## Provenance
 

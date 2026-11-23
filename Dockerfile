@@ -33,7 +33,7 @@ RUN corepack install && pnpm install --frozen-lockfile
 
 COPY . .
 
-# SITE_URL is what canonical tags, og:image, RSS and the sitemap are written
+# SITE_URL is what canonical tags, og:image and the sitemap are written
 # against. A preview is not the deployed site, so it says so plainly rather
 # than baking in a domain that is not yours.
 ARG SITE_URL=http://localhost:4321
@@ -45,15 +45,10 @@ ENV SITE_URL=$SITE_URL
 #
 # Empty is the default and behaves as unset: no measurement id injects no
 # gtag, and an empty PUBLIC_CONSENT_ENABLED resolves to false.
-#
-# RESEND_API_KEY, RESEND_FROM_EMAIL and RESEND_AUDIENCE_ID are not here: they
-# are read by the API routes, and the runtime image is nginx serving static
-# files.
 ARG PUBLIC_GA_MEASUREMENT_ID=
 ARG PUBLIC_GTM_ID=
 ARG PUBLIC_UMAMI_WEBSITE_ID=
 ARG PUBLIC_UMAMI_SRC=
-ARG PUBLIC_GOOGLE_MAPS_API_KEY=
 ARG PUBLIC_CONSENT_ENABLED=
 ARG PUBLIC_PRIVACY_POLICY_URL=
 ARG GOOGLE_SITE_VERIFICATION=
@@ -62,7 +57,6 @@ ENV PUBLIC_GA_MEASUREMENT_ID=$PUBLIC_GA_MEASUREMENT_ID \
     PUBLIC_GTM_ID=$PUBLIC_GTM_ID \
     PUBLIC_UMAMI_WEBSITE_ID=$PUBLIC_UMAMI_WEBSITE_ID \
     PUBLIC_UMAMI_SRC=$PUBLIC_UMAMI_SRC \
-    PUBLIC_GOOGLE_MAPS_API_KEY=$PUBLIC_GOOGLE_MAPS_API_KEY \
     PUBLIC_CONSENT_ENABLED=$PUBLIC_CONSENT_ENABLED \
     PUBLIC_PRIVACY_POLICY_URL=$PUBLIC_PRIVACY_POLICY_URL \
     GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION \
@@ -73,10 +67,7 @@ RUN pnpm run build
 # ── Runtime ──────────────────────────────────────────────────────────────────
 FROM nginx:alpine AS runtime
 
-# `dist/client` is what Astro writes for every deploy target. The adapters
-# then copy it into their own layout — .vercel/output/static and so on — so
-# this is the one path that does not depend on which target was built.
-COPY --from=build /app/dist/client /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-security-headers.conf /etc/nginx/security-headers.conf
 

@@ -19,7 +19,7 @@ import { getNavItems, getLogoHref, resolveNavItem, type NavItem } from '@/config
 describe('nav config — locale resolution (en default, nl secondary)', () => {
   it('keeps default-locale hrefs at the site root', () => {
     const items = getNavItems('en');
-    expect(items.map((i) => i.href)).toEqual(['/', '/#features', '/#workflow', '/docs/', '/#media']);
+    expect(items.map((i) => i.href)).toEqual(['/', '/#features', '/#workflow', '/#media', '/docs/']);
     expect(items.find((i) => i.label === 'Docs')?.href).toBe('/docs/');
   });
 

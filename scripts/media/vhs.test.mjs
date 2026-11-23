@@ -36,6 +36,7 @@ test('native runner renders the tape from project config and invokes it', async 
     assert.match(logged, /media-output\/vhs\/quickstart\.generated\.tape/);
     const generated = await readFile(join(root, 'media-output/vhs/quickstart.generated.tape'), 'utf8');
     assert.ok(generated.includes(project.name), 'generated tape should name the project');
+    assert.ok(generated.includes(project.hero.eyebrow || 'Project quick start'), 'generated tape should include the intro');
     assert.doesNotMatch(generated, /{{/, 'generated tape should have no unfilled placeholders');
   } finally {
     await rm(folder, { recursive: true, force: true });

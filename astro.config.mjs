@@ -6,7 +6,6 @@ import mdx from '@astrojs/mdx';
 import starlight from '@astrojs/starlight';
 import { project } from './src/config/project.config.ts';
 import sitemap from '@astrojs/sitemap';
-import react from '@astrojs/react';
 import icon from 'astro-icon';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
@@ -19,6 +18,10 @@ import {
   disagreementMessage,
 } from './scripts/site-url-agreement.mjs';
 import { SITE_NAME, THEME_COLOR } from './src/config/branding.ts';
+import { starlightAccentCss } from './src/lib/accent.ts';
+import { buildFaviconSvg } from './src/lib/favicon/svg.ts';
+import { renderFaviconPng, renderFaviconIco } from './src/lib/favicon/raster.ts';
+import { renderOgPng } from './src/lib/og/raster.ts';
 
 /**
  * Load `.env` into `process.env` before anything below reads it.
@@ -52,12 +55,7 @@ for (const file of ['.env.local', '.env']) {
 }
 
 /**
- * Deploy-target adapter selection. Vercel is the default; set
- * `DEPLOY_TARGET=netlify` or `DEPLOY_TARGET=cloudflare` to build for those
- * platforms instead. All three keep `output: 'static'`, so every page is
- * prerendered and only the `prerender = false` API routes (the contact form
- * and newsletter) ship as the platform's serverless/edge function — on
- * Cloudflare Pages, as a Pages Function.
+ * Static output is the default. Set DEPLOY_TARGET to select a host adapter.
  */
 const deployTarget = process.env.DEPLOY_TARGET;
 
@@ -102,7 +100,7 @@ async function resolveAdapter() {
  * Build-time check that the site knows its own address.
  *
  * With `SITE_URL` unset the build still succeeds, and every canonical tag,
- * `og:url`, `og:image`, RSS link and sitemap entry is written against the
+ * `og:url`, `og:image` and sitemap entry is written against the
  * placeholder above — pointing search engines and social crawlers at a domain
  * that isn't yours. Nothing in the output looks broken, so it survives to
  * production easily. Warn where it will be read: the build log.
@@ -114,7 +112,7 @@ function siteUrlCheck() {
       'astro:build:start': ({ logger }) => {
         if (process.env.SITE_URL) return;
         logger.warn(
-          `SITE_URL is not set, so canonical URLs, og:image, RSS and the sitemap ` +
+          `SITE_URL is not set, so canonical URLs, og:image and the sitemap ` +
             `will all be written against ${SITE_URL_FALLBACK}. Set SITE_URL in ` +
             `your host's environment variables to your own domain.`
         );
@@ -158,11 +156,6 @@ function faviconAssets() {
     name: 'favicon-assets',
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
-        // Imported here rather than at the top of this file: a static import
-        // of the sharp-backed module makes pagefind's own dynamic import above
-        // fail with "Vite module runner has been closed" (#600).
-        const { buildFaviconSvg } = await import('./src/lib/favicon/svg.ts');
-        const { renderFaviconPng, renderFaviconIco } = await import('./src/lib/favicon/raster.ts');
         const out = fileURLToPath(dir);
 
         await writeFile(join(out, 'favicon.svg'), buildFaviconSvg(letter, THEME_COLOR));
@@ -204,12 +197,6 @@ const basePath = (() => {
  * from the same page's `og:title` and `og:description`.
  */
 function ogCards() {
-  const KINDS = [
-    [/^\/og\/blog\/tag\//, 'BLOG'],
-    [/^\/og\/blog\//, 'BLOG'],
-    [/^\/og\/projects\//, 'PROJECTS'],
-  ];
-
   async function htmlFiles(directory) {
     const found = [];
     for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -236,7 +223,6 @@ function ogCards() {
     name: 'og-cards',
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
-        const { renderOgPng } = await import('./src/lib/og/raster.ts');
         const out = fileURLToPath(dir);
         const siteUrl = process.env.SITE_URL || SITE_URL_FALLBACK;
         const domain = new URL(siteUrl).host;
@@ -260,7 +246,6 @@ function ogCards() {
           wanted.set(path, {
             title: meta(html, 'og:title') || SITE_NAME,
             subtitle: meta(html, 'og:description'),
-            kind: KINDS.find(([re]) => re.test(path))?.[1],
           });
         }
 
@@ -407,9 +392,6 @@ export default defineConfig({
         optional: true,
         default: 'https://cloud.umami.is/script.js',
       }),
-      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      RESEND_FROM_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
-      RESEND_AUDIENCE_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       GOOGLE_SITE_VERIFICATION: envField.string({
         context: 'server',
         access: 'public',
@@ -419,12 +401,6 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-      }),
-      PUBLIC_GOOGLE_MAPS_API_KEY: envField.string({
-        context: 'client',
-        access: 'public',
-        optional: true,
-        default: '',
       }),
       PUBLIC_CONSENT_ENABLED: envField.boolean({
         context: 'client',
@@ -446,30 +422,16 @@ export default defineConfig({
   },
 
   integrations: [
-    react(),
     starlight({
       title: SITE_NAME,
       description: project.description,
       disable404Route: true,
       credits: true,
-      social: [{ icon: 'github', label: 'Source', href: project.repository }],
-      sidebar: [
-        {
-          label: 'Start here',
-          items: [
-            { label: 'Overview', slug: 'docs' },
-            { label: 'Getting started', slug: 'docs/getting-started' },
-            { label: 'Configuration', slug: 'docs/configuration' },
-          ],
-        },
-        {
-          label: 'Guides',
-          items: [
-            { label: 'Screenshots & video', slug: 'docs/media' },
-            { label: 'Deployment', slug: 'docs/deployment' },
-          ],
-        },
-      ],
+      social: project.repository ? [{ icon: 'github', label: 'Source', href: project.repository }] : [],
+      // Pages appear in the order of their `sidebar.order` frontmatter, so a new
+      // file in src/content/docs/docs/ shows up without editing this config.
+      sidebar: [{ label: 'Documentation', items: [{ autogenerate: { directory: 'docs' } }] }],
+      head: [{ tag: 'style', content: starlightAccentCss(THEME_COLOR) }],
     }),
     mdx(),
     sitemap(),

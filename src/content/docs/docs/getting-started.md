@@ -1,20 +1,22 @@
 ---
 title: Getting started
 description: Run and personalize your single-project Astro website.
+sidebar:
+  order: 2
 ---
 
 ## Requirements
 
 - Node.js **22.23.4 or newer**
 - pnpm **10.33.0**, using the `packageManager` field and Corepack
-- Git, plus a GitHub fork of the [Astro Rocket repository](https://github.com/hansmartensdev/Astro-Rocket)
+- Git and a copy of this template
 
 ## Local development
 
 ```bash
 # In your forked repository
 corepack enable
-pnpm install
+pnpm install --frozen-lockfile
 cp .env.example .env
 pnpm dev
 ```
@@ -23,8 +25,8 @@ The homepage is available at `http://localhost:4321/` and the Starlight docs at 
 
 ## Make it yours
 
-1. Open `src/config/project.config.ts` and replace the project name, headline, summary, features, GitHub repository URL, and calls to action.
-2. Open `src/config/branding.ts` and set `SITE_NAME` and `THEME_COLOR`.
+1. Open `src/config/project.config.ts` and set the project name, description, and `accentColor`.
+2. Customize the hero, sections, and links in the same file. Use the [configuration guide](../configuration/) to choose a hero visual and add screenshots.
 3. Open `src/config/site.config.ts` for SEO, author, and organization details. Set `SITE_URL` in the deployment environment.
 4. Edit the markdown files in `src/content/docs/docs/`.
 5. Replace example assets and verify all links point to your actual project.
@@ -34,6 +36,7 @@ The homepage is available at `http://localhost:4321/` and the Starlight docs at 
 ```bash
 pnpm check
 pnpm build
+pnpm check:site --strict
 pnpm preview
 ```
 

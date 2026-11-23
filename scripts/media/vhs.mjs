@@ -22,7 +22,10 @@ function tapeSafe(label, value) {
   }
   return value;
 }
-const values = { PROJECT_NAME: tapeSafe('name', project.name), PROJECT_EYEBROW: tapeSafe('eyebrow', project.eyebrow) };
+const values = {
+  PROJECT_NAME: tapeSafe('name', project.name),
+  PROJECT_EYEBROW: tapeSafe('hero.eyebrow', project.hero.eyebrow || 'Project quick start'),
+};
 let rendered = await readFile(resolve(root, template), 'utf8');
 for (const [key, value] of Object.entries(values)) rendered = rendered.replaceAll(`{{${key}}}`, value);
 const unfilled = rendered.match(/{{[A-Z_]+}}/);

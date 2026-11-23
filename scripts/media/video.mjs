@@ -26,11 +26,8 @@ try {
   if (!response?.ok()) throw new Error(`Video source returned ${response?.status()}`);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(1200);
-  for (const selector of ['#features', '#workflow', '#media', '#faq']) {
-    await page.locator(selector).waitFor();
-    await page.evaluate(async (targetSelector) => {
-      const element = document.querySelector(targetSelector);
-      if (!element) return;
+  for (const section of await page.locator('.project-site > section[id]').all()) {
+    await section.evaluate(async (element) => {
       const target = window.scrollY + element.getBoundingClientRect().top - 90;
       const start = window.scrollY;
       const startTime = performance.now();
@@ -44,7 +41,7 @@ try {
         };
         requestAnimationFrame(frame);
       });
-    }, selector);
+    });
     await page.waitForTimeout(900);
   }
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));

@@ -1,22 +1,22 @@
 ---
 title: Deployment
 description: Build and deploy the Astro project homepage and Starlight docs together.
+sidebar:
+  order: 5
 ---
 
 ## Build
 
 ```bash
-pnpm install # generates a lockfile from the newly added dependencies
+pnpm install --frozen-lockfile
 SITE_URL=https://your-actual-domain.example pnpm build
 ```
 
-Commit the generated `pnpm-lock.yaml`. Once it is committed, update CI from `pnpm install --no-frozen-lockfile` to `pnpm install --frozen-lockfile`.
-
-The generated static output includes `/index.html` and `/docs/index.html`. Use Astro Rocket's supported deployment target or a static site host. For fully static hosting, ensure the build is configured to emit static HTML and that hosting rewrites do not shadow the `/docs/` pages.
+The default build writes static files to `dist/`, including `index.html` and `docs/index.html`. Publish that directory on a static host and route `/docs/` to the generated docs.
 
 ## GitHub Pages
 
-The **Deploy to GitHub Pages** workflow builds and publishes the site when a release is published, or manually via **Actions → Deploy to GitHub Pages → Run workflow**. Pushes and pull requests only run lint and type-checks. In the repository settings, set **Pages → Source** to **GitHub Actions**.
+The **Deploy to GitHub Pages** workflow builds and publishes the site when a release is published, or manually via **Actions → Deploy to GitHub Pages → Run workflow**. Pushes and pull requests run lint, type checks, and VHS tests. In the repository settings, set **Pages → Source** to **GitHub Actions**.
 
 A project site is served below a sub-path such as `/project-website-bootstrap/`. The workflow reads that path from `actions/configure-pages` and passes it to the build as `BASE_PATH`; with a custom domain it is empty and the site is served from the root. To reproduce it locally:
 
