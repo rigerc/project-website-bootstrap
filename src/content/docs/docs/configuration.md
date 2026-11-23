@@ -14,9 +14,13 @@ export const project = {
   summary: 'What it does and who it helps',
   repository: 'https://github.com/YOU/REPO',
   demoUrl: '',
-  // ...
+  terminal: { title: 'name / terminal', commands: ['npm install -g name'], /* ... */ },
+  sections: { features: { kicker, heading, lead }, /* workflow, media, faq, cta */ },
+  // benefits, steps, faqs ...
 } as const;
 ```
+
+Every visible string on the homepage comes from this file, including the hero terminal mockup and each section heading. Put `\n` in a heading to break it onto two lines. Nothing on the homepage is hardcoded in `src/pages/index.astro`, and `pnpm check:site --strict` fails if any of the template's default placeholder text (its example project name, repository path, or terminal title) is left in the built pages. Plain `pnpm check:site` only warns, since a fresh template has them on purpose.
 
 The docs are in `src/content/docs/docs/*.md`. Starlight is configured under `starlight()` in `astro.config.mjs` and the `docs` content collection in `src/content.config.ts`.
 

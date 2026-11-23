@@ -1,5 +1,7 @@
 # VHS records a terminal, not a browser tab. Webpage screenshots use Playwright.
 # Re-run using: pnpm media:vhs (native VHS) or pnpm media:vhs --docker.
+# This is a template: scripts/media/vhs.mjs fills the double-brace placeholders below from
+# src/config/project.config.ts and runs the result (media-output/vhs/quickstart.generated.tape).
 Output media-output/vhs/quickstart.gif
 Output media-output/vhs/quickstart.mp4
 
@@ -11,10 +13,10 @@ Set Framerate 30
 Set TypingSpeed 55ms
 Set CursorBlink false
 
-Type "echo 'YOUR PROJECT  /  quick start'"
+Type "echo '{{PROJECT_NAME}}  /  quick start'"
 Enter
 Sleep 800ms
-Type "echo 'One website  /  Starlight docs  /  automated visual media'"
+Type "echo '{{PROJECT_EYEBROW}}'"
 Enter
 Sleep 1s
 Type "ls src/content/docs/docs"

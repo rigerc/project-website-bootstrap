@@ -6,8 +6,7 @@ Built from [Astro Rocket](https://github.com/hansmartensdev/Astro-Rocket) by Han
 
 ```bash
 corepack enable
-pnpm install
-# Commit the newly generated pnpm-lock.yaml before enabling frozen CI installs.
+pnpm install --frozen-lockfile
 cp .env.example .env
 pnpm dev
 ```
@@ -25,7 +24,7 @@ pnpm preview
 
 ## Generate screenshots and video
 
-Run a production preview on `localhost:4321`, then:
+Run a production preview with `pnpm preview --port 4321 --strictPort`, then (the scripts refuse to capture if something else is answering on that port):
 
 ```bash
 pnpm exec playwright install chromium

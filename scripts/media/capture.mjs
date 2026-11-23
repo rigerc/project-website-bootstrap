@@ -2,7 +2,9 @@ import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const baseUrl = (process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:4321').replace(/\/$/, '');
+import { baseUrl, assertTargetIsThisSite } from './target.mjs';
+
+await assertTargetIsThisSite();
 const outDir = resolve('media-output/screenshots');
 await mkdir(outDir, { recursive: true });
 

@@ -45,7 +45,8 @@ const {
 // Social cards do not: Facebook, LinkedIn and X render `og:site_name` as their
 // own line above the title, so repeating it in `og:title` shows the name twice
 // and spends ~16 characters of a box that truncates around 60-70.
-const pageTitle = title ? `${title} — ${siteConfig.name}` : siteConfig.name;
+// A page titled with the site name itself (the homepage) would read "Name — Name".
+const pageTitle = title && title !== siteConfig.name ? `${title} — ${siteConfig.name}` : siteConfig.name;
 const socialTitle = title || siteConfig.name;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
