@@ -25,7 +25,7 @@ Build the site and run a preview server in one terminal:
 
 ```bash
 pnpm build
-pnpm preview --host 127.0.0.1 --port 4321
+pnpm preview --host 127.0.0.1 --port 4321 --strictPort
 ```
 
 In another terminal:
@@ -58,8 +58,10 @@ Each run builds the static site, starts the preview server, captures screenshots
 ## Capture controls
 
 - `PLAYWRIGHT_BASE_URL` can point at an alternative server (defaults to `http://127.0.0.1:4321`).
+- Before capturing, the scripts fetch the home page and fail unless its title contains the project name. This catches another app already holding port 4321 while Astro's preview quietly moves to the next free port; `--strictPort` makes the preview fail instead of moving.
 - The browser context fixes viewport size, color mode, animation preferences, and device scale for repeatable output.
 - The script waits for fonts and captures only after the page settles.
+- The VHS tape (`scripts/media/tapes/quickstart.tape`) is a template: `pnpm media:vhs` fills in the project name and eyebrow from `src/config/project.config.ts` and records the result. Edit the commands in the template to show your own CLI.
 - The VHS tape uses a fixed 1100 × 600 terminal and writes PNG/GIF/MP4 outputs independently of the preview server.
 - The video script scrolls through `#features`, `#workflow`, `#media`, then returns to the top. Adjust these selectors if your homepage sections change.
 

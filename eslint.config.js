@@ -36,4 +36,9 @@ export default [
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
+  {
+    // Command-line scripts report through stdout; that is their interface.
+    files: ['scripts/**'],
+    rules: { 'no-console': 'off' },
+  },
 ];

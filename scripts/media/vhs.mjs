@@ -4,13 +4,30 @@
  * Neither route needs the website preview server.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { project } from '../../src/config/project.config.ts';
 
-const tape = 'scripts/media/tapes/quickstart.tape';
+const template = 'scripts/media/tapes/quickstart.tape';
+const tape = 'media-output/vhs/quickstart.generated.tape';
 const image = 'ghcr.io/charmbracelet/vhs:v0.12.1';
 const root = process.cwd();
 await mkdir(resolve(root, 'media-output/vhs'), { recursive: true });
+
+// The tape types these values into a shell inside `echo '...'` inside a VHS
+// string, so quotes, backslashes and shell metacharacters would break it.
+function tapeSafe(label, value) {
+  if (!value || /['"\\`$]/.test(value)) {
+    throw new Error(`project.${label} must be non-empty and free of quotes, backslashes, backticks and $ to be typed into the VHS tape.`);
+  }
+  return value;
+}
+const values = { PROJECT_NAME: tapeSafe('name', project.name), PROJECT_EYEBROW: tapeSafe('eyebrow', project.eyebrow) };
+let rendered = await readFile(resolve(root, template), 'utf8');
+for (const [key, value] of Object.entries(values)) rendered = rendered.replaceAll(`{{${key}}}`, value);
+const unfilled = rendered.match(/{{[A-Z_]+}}/);
+if (unfilled) throw new Error(`Unfilled placeholder ${unfilled[0]} in ${template}`);
+await writeFile(resolve(root, tape), rendered);
 
 function exists(command) {
   return !spawnSync(command, ['--version'], { stdio: 'ignore' }).error;

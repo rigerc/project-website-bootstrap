@@ -92,12 +92,6 @@
     "zod": "^4.0.0",
     "playwright": "^1.65.1"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
-  },
   "engines": {
     "node": ">=22.23.4"
   }

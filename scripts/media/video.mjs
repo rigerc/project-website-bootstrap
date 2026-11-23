@@ -3,7 +3,9 @@ import { mkdir, copyFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 
-const baseUrl = (process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:4321').replace(/\/$/, '');
+import { baseUrl, assertTargetIsThisSite } from './target.mjs';
+
+await assertTargetIsThisSite();
 const videos = resolve('media-output/videos');
 const raw = resolve('media-output/raw');
 await mkdir(videos, { recursive: true });
