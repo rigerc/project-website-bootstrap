@@ -51,7 +51,7 @@ Make terminal demo edits in the `.tape` file, not in generated assets. Outputs a
 
 ## GitHub Actions
 
-The `.github/workflows/visual-media.yml` workflow runs on pushes to `main`, pull requests, a weekly schedule, and manually via **Actions → Visual media → Run workflow**.
+The `.github/workflows/visual-media.yml` workflow runs when a release is published and manually via **Actions → Visual media → Run workflow**.
 
 Each run builds the static site, starts the preview server, captures screenshots, records the browser video, converts it to MP4, executes the VHS tape in its official Docker image, and uploads a **visual-media** artifact. You can download the artifact from the run's summary page. The workflow has read-only repository permissions and never pushes generated media into Git automatically.
 

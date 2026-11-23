@@ -16,7 +16,7 @@ The generated static output includes `/index.html` and `/docs/index.html`. Use A
 
 ## GitHub Pages
 
-The **Deploy to GitHub Pages** workflow builds and publishes the site on every push to `main`. In the repository settings, set **Pages → Source** to **GitHub Actions**.
+The **Deploy to GitHub Pages** workflow builds and publishes the site when a release is published, or manually via **Actions → Deploy to GitHub Pages → Run workflow**. Pushes and pull requests only run lint and type-checks. In the repository settings, set **Pages → Source** to **GitHub Actions**.
 
 A project site is served below a sub-path such as `/project-website-bootstrap/`. The workflow reads that path from `actions/configure-pages` and passes it to the build as `BASE_PATH`; with a custom domain it is empty and the site is served from the root. To reproduce it locally:
 

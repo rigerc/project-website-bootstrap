@@ -37,7 +37,7 @@ pnpm media:vhs --docker
 pnpm media:all --docker
 ```
 
-Output: `media-output/screenshots/*.png`, `media-output/videos/walkthrough.{webm,mp4}`, and `media-output/vhs/quickstart.{png,gif,mp4}`. VHS takes terminal screenshots; it does not replace Playwright for webpage screenshots. Edit `scripts/media/tapes/quickstart.tape` to change the terminal demo. These files are excluded from Git. The **Visual media** GitHub Actions workflow uses the official pinned VHS container and runs on pushes, pull requests, weekly, and on demand. It uploads the files as artifacts; it does not commit them or deploy the site.
+Output: `media-output/screenshots/*.png`, `media-output/videos/walkthrough.{webm,mp4}`, and `media-output/vhs/quickstart.{png,gif,mp4}`. VHS takes terminal screenshots; it does not replace Playwright for webpage screenshots. Edit `scripts/media/tapes/quickstart.tape` to change the terminal demo. These files are excluded from Git. The **Visual media** GitHub Actions workflow uses the official pinned VHS container and runs when a release is published and on demand. It uploads the files as artifacts; it does not commit them or deploy the site.
 
 ## Publishing
 

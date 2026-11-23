@@ -1,12 +1,9 @@
 name: Visual media
 
+# Builds the site and captures media only for published releases or manual runs.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-    - cron: '15 5 * * 1'
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:

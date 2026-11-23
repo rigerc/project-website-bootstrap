@@ -1,8 +1,9 @@
 name: Deploy to GitHub Pages
 
+# Deploys only when a release is published or the workflow is run manually.
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 # Pages needs to write the deployment and mint an OIDC token; nothing else.
